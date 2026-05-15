@@ -1,0 +1,85 @@
+﻿---
+import Layout from '../../components/Layout.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'ca' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const prefix = `/${lang}`;
+
+const comoSteps = t(lang, 'cont.comoSteps').split('|');
+---
+
+<Layout title={t(lang, 'nav.contacto')} description={t(lang, 'cont.sub')}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">{t(lang, 'cont.eyebrow')}</p>
+      <h1>{t(lang, 'cont.heading')}</h1>
+      <p class="page-sub">{t(lang, 'cont.sub')}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-layout">
+      <div class="contact-cards">
+        <a href="mailto:soportejhugo3d@gmail.com" class="contact-card">
+          <div class="card-icon">✉</div>
+          <div><p class="card-label">{t(lang, 'cont.email')}</p><p class="card-val">soportejhugo3d@gmail.com</p></div>
+        </a>
+        <a href="https://www.instagram.com/jhugo3d/" target="_blank" rel="noopener" class="contact-card">
+          <div class="card-icon">📷</div>
+          <div><p class="card-label">{t(lang, 'cont.ig')}</p><p class="card-val">@jhugo3d</p></div>
+        </a>
+        <a href="https://www.tiktok.com/@_jhugo3d_" target="_blank" rel="noopener" class="contact-card">
+          <div class="card-icon">🎵</div>
+          <div><p class="card-label">{t(lang, 'cont.tt')}</p><p class="card-val">@_jhugo3d_</p></div>
+        </a>
+        <div class="contact-card no-link">
+          <div class="card-icon">📍</div>
+          <div><p class="card-label">{t(lang, 'cont.ubicacion')}</p><p class="card-val">{t(lang, 'cont.ciudad')}</p></div>
+        </div>
+      </div>
+
+      <div class="contact-info">
+        <div class="info-block">
+          <h3>{t(lang, 'cont.cuandoH')}</h3>
+          <p>{t(lang, 'cont.cuandoT')}</p>
+        </div>
+        <div class="info-block">
+          <h3>{t(lang, 'cont.comoH')}</h3>
+          <ol class="como-steps">
+            {comoSteps.map((step, i) => (<li><span class="step-num">{i + 1}</span>{step}</li>))}
+          </ol>
+        </div>
+        <div class="info-block">
+          <h3>{t(lang, 'cont.archivoH')}</h3>
+          <p>{t(lang, 'cont.archivoT')}</p>
+          <a href={`${prefix}/personalizado`} class="btn btn-ghost" style="padding-left:0">{t(lang, 'cont.archivoLink')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.page-hero { padding-top: calc(64px + 3.5rem); padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+.page-hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin-top: 0.5rem; }
+.page-sub { color: var(--text-muted); margin-top: 0.5rem; max-width: 56ch; }
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.contact-cards { display: flex; flex-direction: column; gap: 0.75rem; }
+.contact-card { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.15s, transform 0.15s; }
+.contact-card:not(.no-link):hover { border-color: var(--gold); transform: translateX(4px); }
+.no-link { cursor: default; }
+.card-icon { font-size: 1.4rem; width: 40px; text-align: center; flex-shrink: 0; }
+.card-label { font-family: var(--font-display); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 0.2rem; }
+.card-val { font-size: 0.9rem; color: var(--text-muted); }
+.contact-info { display: flex; flex-direction: column; gap: 2rem; }
+.info-block h3 { font-size: 1rem; margin-bottom: 0.6rem; }
+.info-block p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+.como-steps { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.como-steps li { display: flex; align-items: center; gap: 0.75rem; color: var(--text-muted); font-size: 0.9rem; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--gold-dim); border: 1px solid rgba(212,168,50,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: var(--gold); flex-shrink: 0; }
+@media (max-width: 760px) { .contact-layout { grid-template-columns: 1fr; gap: 2rem; } }
+</style>

@@ -1,0 +1,132 @@
+﻿---
+import Layout from '../../components/Layout.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'ca' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const prefix = `/${lang}`;
+
+const casos: Array<{ icon: string; titulo: string; desc: string }> = lang === 'en'
+  ? [
+      { icon: '🪪', titulo: 'Custom card holder', desc: 'Your design, your name, your brand. Unique card holders in any shape you imagine.' },
+      { icon: '🖼️', titulo: 'Frame with your photo', desc: 'Upload your favourite image and we turn it into a 3D frame with its own relief.' },
+      { icon: '💍', titulo: 'Custom jewellery', desc: 'Rings, pendants, earrings. If you have the design (or the idea), we print it.' },
+      { icon: '🗿', titulo: 'Figures and sculptures', desc: 'Characters, logos, art pieces. No shape limits if you have the file.' },
+    ]
+  : [
+      { icon: '🪪', titulo: 'Targeter personalitzat', desc: 'El teu disseny, el teu nom, la teva marca. Targeters únics amb la forma que imaginis.' },
+      { icon: '🖼️', titulo: 'Marc amb la teva foto', desc: 'Puja la teva imatge preferida i la convertim en un marc 3D amb relleu propi.' },
+      { icon: '💍', titulo: 'Joieria a mida', desc: 'Anells, penjolls, arracades. Si tens el disseny (o la idea), ho imprimim.' },
+      { icon: '🗿', titulo: 'Figures i escultures', desc: 'Personatges, logos, peces artístiques. Sense límits de forma si tens l\'arxiu.' },
+    ];
+---
+
+<Layout title={t(lang, 'nav.personalizado')} description={t(lang, 'pers.sub')}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">{t(lang, 'pers.eyebrow')}</p>
+      <h1>{t(lang, 'pers.heading')}</h1>
+      <p class="hero-sub">{t(lang, 'pers.sub')}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container two-col">
+      <div class="casos">
+        <h2 class="section-title reveal" style="font-size: clamp(1.5rem, 4vw, 2.25rem);">
+          {lang === 'en' ? 'What do people use it for?' : 'Per a què ho fan servir?'}
+        </h2>
+        <p class="section-sub reveal">
+          {lang === 'en' ? 'These are some real projects we have already done.' : 'Aquests són alguns projectes reals que ja hem fet.'}
+        </p>
+        <div class="casos-grid">
+          {casos.map(c => (
+            <div class="caso-card reveal">
+              <span class="caso-icon">{c.icon}</span>
+              <h3>{c.titulo}</h3>
+              <p>{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="form-col reveal">
+        <div class="form-card">
+          <h2>{lang === 'en' ? 'Tell us about your project' : 'Explica\'ns el teu projecte'}</h2>
+          <p class="form-sub">
+            {lang === 'en' ? 'We fill in the email for you. You just need to send it.' : 'Omplim el correu per tu. Només cal que l\'enviïs.'}
+          </p>
+
+          <form class="contact-form" id="custom-form">
+            <div class="field">
+              <label for="fname">{t(lang, 'pers.nombre')}</label>
+              <input type="text" id="fname" name="nombre" placeholder={lang === 'en' ? 'Your name' : 'El teu nom'} required />
+            </div>
+            <div class="field">
+              <label for="femail">{t(lang, 'pers.contactoLabel')}</label>
+              <input type="text" id="femail" name="contacto" placeholder={lang === 'en' ? 'your@email.com or @your_handle' : 'el.teu@email.com o @el_teu_handle'} required />
+            </div>
+            <div class="field">
+              <label for="fdesc">{t(lang, 'pers.descripcion')}</label>
+              <textarea id="fdesc" name="descripcion" rows="5" placeholder={t(lang, 'pers.descripcionPlaceholder')} required></textarea>
+            </div>
+            <p class="file-note">{t(lang, 'pers.archivoNota')}</p>
+            <button type="submit" class="btn btn-primary btn-full">{t(lang, 'pers.enviar')}</button>
+          </form>
+        </div>
+
+        <div class="alt-contact reveal">
+          <p>{t(lang, 'pers.o')}:</p>
+          <a href="mailto:soportejhugo3d@gmail.com" class="alt-email">soportejhugo3d@gmail.com</a>
+          <a href="https://www.instagram.com/jhugo3d/" target="_blank" rel="noopener" class="alt-ig">
+            {t(lang, 'pers.igBtn')} @jhugo3d
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.page-hero { padding-top: calc(64px + 4rem); padding-bottom: 4rem; border-bottom: 1px solid var(--border); }
+.page-hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin-top: 0.5rem; }
+.hero-sub { color: var(--text-muted); max-width: 60ch; margin-top: 1rem; line-height: 1.7; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.casos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.caso-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+.caso-icon { font-size: 1.75rem; display: block; margin-bottom: 0.6rem; }
+.caso-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+.caso-card p  { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+.form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; }
+.form-card h2 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+.form-sub { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem; }
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+.field label { font-family: var(--font-display); font-size: 0.8rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; }
+.field input, .field textarea { background: var(--surface-2); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 0.7rem 0.9rem; color: var(--text); font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: border-color 0.15s; resize: vertical; }
+.field input:focus, .field textarea:focus { border-color: var(--gold); }
+.file-note { font-size: 0.8rem; color: var(--text-subtle); }
+.btn-full { width: 100%; justify-content: center; margin-top: 0.5rem; }
+.alt-contact { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.875rem; }
+.alt-contact p { color: var(--text-muted); }
+.alt-email, .alt-ig { color: var(--gold); transition: color 0.15s; }
+.alt-email:hover, .alt-ig:hover { color: var(--gold-bright); }
+@media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .casos-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+document.getElementById('custom-form')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = e.target as HTMLFormElement;
+  const nombre = (form.elements.namedItem('nombre') as HTMLInputElement).value;
+  const contacto = (form.elements.namedItem('contacto') as HTMLInputElement).value;
+  const descripcion = (form.elements.namedItem('descripcion') as HTMLTextAreaElement).value;
+  const subject = encodeURIComponent('Solicitud de impresión personalizada');
+  const body = encodeURIComponent(`Hola Hugo,\n\nQuiero solicitar una impresión personalizada.\n\nNombre: ${nombre}\nContacto: ${contacto}\nDescripción del proyecto:\n${descripcion}\n\nGracias,\n${nombre}`);
+  window.location.href = `mailto:soportejhugo3d@gmail.com?subject=${subject}&body=${body}`;
+});
+</script>
