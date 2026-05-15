@@ -59,7 +59,7 @@ description: "48 diseños disponibles desde 3€. Joyería, figuras, soportes, m
           <button class="nota-toggle" type="button" aria-expanded="false" data-label-open="✎ Personalizar" data-label-close="✕ Cerrar personalización">✎ Personalizar</button>
           <textarea class="nota-input" placeholder="Color, texto, nombre, tamaño..." rows="2" hidden></textarea>
         </div>
-        <button class="jh-add-btn" data-slug="{{ product.slug }}" data-nombre="{{ product.nombre }}" data-precio="{{ product.precio }}" data-preciotexto="{{ product.precioTexto }}" data-imagen="{{ product.imagen }}">+ Añadir al carrito</button>
+        <button class="jh-add-btn" data-slug="{{ product.slug | default: product.basename }}" data-nombre="{{ product.nombre }}" data-precio="{{ product.precio }}" data-preciotexto="{{ product.precioTexto | default: product.precio }}" data-imagen="{{ product.imagen }}">+ Añadir al carrito</button>
       </article>
       {% endfor %}
     </div>

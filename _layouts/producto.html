@@ -10,8 +10,8 @@ layout: default
 
     <div class="product-detail-info">
       <p class="eyebrow">{{ site.data.categories[page.categoria] | default: page.categoria }}</p>
-      <h1>{{ page.nombre }}</h1>
-      <p class="product-price">{{ page.precioTexto }}</p>
+      <h1>{{ page.nombre | default: page.title }}</h1>
+      <p class="product-price">{{ page.precioTexto | default: page.precio }}</p>
       {% if page.precioVariante %}
       <p class="product-variant">{{ page.precioVariante }}</p>
       {% endif %}
@@ -19,10 +19,10 @@ layout: default
 
       <button
         class="jh-add-btn"
-        data-slug="{{ page.slug }}"
-        data-nombre="{{ page.nombre }}"
+        data-slug="{{ page.slug | default: page.basename }}"
+        data-nombre="{{ page.nombre | default: page.title }}"
         data-precio="{{ page.precio }}"
-        data-preciotexto="{{ page.precioTexto }}"
+        data-preciotexto="{{ page.precioTexto | default: page.precio }}"
         data-imagen="{{ page.imagen }}"
       >
         + Añadir al carrito

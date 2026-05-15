@@ -6,7 +6,7 @@ markdown: kramdown
 collections:
   productos:
     output: true
-    permalink: /productos/:name/
+    permalink: /producto/:name/
 defaults:
   - scope:
       path: ""
