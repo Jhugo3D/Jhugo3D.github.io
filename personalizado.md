@@ -2,6 +2,7 @@
 layout: default
 title: Impresión personalizada
 description: "Servicio de impresión 3D personalizada. Envía tu idea o archivo y te damos presupuesto desde Reus."
+permalink: /personalizado/
 ---
 
 <section class="section">

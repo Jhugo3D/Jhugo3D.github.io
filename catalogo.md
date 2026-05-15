@@ -2,6 +2,7 @@
 layout: default
 title: Catálogo
 description: "48 diseños disponibles desde 3€. Joyería, figuras, soportes, marcos y decoración para impresión 3D."
+permalink: /catalogo/
 ---
 
 <section class="section">

@@ -2,6 +2,7 @@
 layout: default
 title: Contacto
 description: "Contacta con Jhugo3D por email o Instagram para pedidos, ideas y presupuestos."
+permalink: /contacto/
 ---
 
 <section class="section">

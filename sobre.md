@@ -2,6 +2,7 @@
 layout: default
 title: Sobre Jhugo3D
 description: "Conoce a Hugo, creador de Jhugo3D. Diseño e impresión 3D personalizada en Reus."
+permalink: /sobre/
 ---
 
 <section class="section">

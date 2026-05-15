@@ -2,6 +2,7 @@
 layout: default
 title: Cómo lo hacemos
 description: "Descubre el proceso de impresión 3D en Jhugo3D: diseño, laminado, impresión y acabado."
+permalink: /proceso/
 ---
 
 <section class="section">
