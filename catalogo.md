@@ -39,7 +39,10 @@ permalink: /catalogo/
       {% for product in site.productos %}
       {% assign product_url = product.url | default: '/producto/' | append: product.basename | append: '/' %}
       {% assign product_image = product.imagen | default: '/img/productos/' | append: product.basename | append: '.jpg' %}
-      {% assign product_price = product.precioTexto | default: product.precio | append: '€' %}
+      {% assign product_price = product.precioTexto %}
+      {% if product_price == blank %}
+        {% assign product_price = product.precio | append: '€' %}
+      {% endif %}
       <article class="product-card card product-item" data-cat="{{ product.categoria }}" data-precio="{{ product.precio }}">
         <a href="{{ product_url }}" class="card-link">
           <div class="card-img-wrap">

@@ -5,10 +5,12 @@ layout: default
 <section class="section">
   <div class="container product-detail-grid">
     {% assign page_image = page.imagen | default: '/img/productos/' | append: page.basename | append: '.jpg' %}
-    {% assign page_price = page.precioTexto | default: page.precio | append: '€' %}
+    {% assign page_price = page.precioTexto %}
+    {% if page_price == blank %}
+      {% assign page_price = page.precio | append: '€' %}
+    {% endif %}
     <div class="product-detail-media">
       <img src="{{ page_image }}" alt="{{ page.nombre }}" class="product-detail-image" />
-    </div>
 
     <div class="product-detail-info">
       <p class="eyebrow">{{ site.data.categories[page.categoria] | default: page.categoria }}</p>

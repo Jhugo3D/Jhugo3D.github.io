@@ -53,7 +53,10 @@ description: "Impresión 3D personalizada de piezas únicas desde Reus. Catálog
       {% for product in destacados %}
       {% assign product_url = product.url | default: '/producto/' | append: product.basename | append: '/' %}
       {% assign product_image = product.imagen | default: '/img/productos/' | append: product.basename | append: '.jpg' %}
-      {% assign product_price = product.precioTexto | default: product.precio | append: '€' %}
+      {% assign product_price = product.precioTexto %}
+      {% if product_price == blank %}
+        {% assign product_price = product.precio | append: '€' %}
+      {% endif %}
       <article class="product-card card reveal" data-categoria="{{ product.categoria }}">
         <a href="{{ product_url }}" class="card-link">
           <div class="card-img-wrap">
