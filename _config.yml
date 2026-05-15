@@ -1,0 +1,9 @@
+title: Jhugo3D
+email: contacto@jhugo3d.com
+baseurl: ""
+url: "https://jhugo3d.github.io"
+remote_theme: pages-themes/minimal@v0.3.0
+description: "Sitio personal de Jhugo3D convertido a Jekyll para GitHub Pages"
+plugins:
+  - jekyll-feed
+# GitHub Pages construye automáticamente este sitio con Jekyll.
