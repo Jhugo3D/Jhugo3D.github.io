@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<article class="section product-detail">
+  <div class="container product-detail-grid">
+    <img src="{{ page.imagen }}" alt="{{ page.nombre }}" class="product-detail-image" />
+
+    <div class="product-detail-info">
+      <p class="eyebrow">{{ site.data.categories[page.categoria] | default: page.categoria }}</p>
+      <h1>{{ page.nombre }}</h1>
+      <p class="product-price">{{ page.precioTexto }}</p>
+      {% if page.precioVariante %}
+      <p class="product-variant">{{ page.precioVariante }}</p>
+      {% endif %}
+      <p>{{ page.descripcion }}</p>
+      <a href="/contacto/" class="btn btn-primary">Pedir este diseño</a>
+    </div>
+  </div>
+</article>

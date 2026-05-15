@@ -1,9 +1,25 @@
 title: Jhugo3D
-email: contacto@jhugo3d.com
-baseurl: ""
+description: "Impresiones 3D personalizadas de todo lo que imagines desde Reus."
 url: "https://jhugo3d.github.io"
-remote_theme: pages-themes/minimal@v0.3.0
-description: "Sitio personal de Jhugo3D convertido a Jekyll para GitHub Pages"
-plugins:
-  - jekyll-feed
-# GitHub Pages construye automáticamente este sitio con Jekyll.
+baseurl: ""
+markdown: kramdown
+collections:
+  productos:
+    output: true
+    permalink: /productos/:name/
+exclude:
+  - jhugo3d
+  - node_modules
+  - package-lock.json
+  - package.json
+  - tsconfig.json
+  - astro.config.mjs
+  - AUDIT.md
+  - debug-sites.mjs
+  - download-assets.mjs
+  - fetch-images.mjs
+  - generate-products.mjs
+  - scrape-names.mjs
+  - public/
+  - src/
+  - .github/
