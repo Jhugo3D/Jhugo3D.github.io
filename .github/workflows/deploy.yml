@@ -2,7 +2,7 @@ name: Deploy Astro site to Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  BUILD_PATH: "."
+  BUILD_PATH: "jhugo3d"
 
 jobs:
   build:
@@ -34,10 +34,10 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: npm ci
+        run: cd jhugo3d && npm ci
 
       - name: Build Astro
-        run: npm run build
+        run: cd jhugo3d && npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
