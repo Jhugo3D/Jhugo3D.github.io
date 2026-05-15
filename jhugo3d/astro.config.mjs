@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://jhugo3d.com',
+  site: 'https://jhugo3d.github.io',
   base: '/',
   image: {
     remotePatterns: [{ protocol: 'https' }],
