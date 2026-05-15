@@ -8,18 +8,18 @@ description: "Contacta con Jhugo3D por email o Instagram para pedidos, ideas y p
   <div class="container">
     <p class="eyebrow">Ponte en contacto</p>
     <h1>Contacto</h1>
-    <p class="hero-copy">Sugerencias por DM, pedidos por email y preguntas donde prefieras. Respondo personalmente en menos de 24 horas laborables.</p>
+    <p class="section-sub">Sugerencias al DM, pedidos al email. Te respondo personalmente en menos de 24 horas laborables.</p>
 
     <div class="contact-grid">
       <article class="contact-card">
         <h2>Email</h2>
         <p><a href="mailto:soportejhugo3d@gmail.com">soportejhugo3d@gmail.com</a></p>
-        <p>Para pedidos, archivos y presupuestos.</p>
+        <p>Envíanos archivos, pedidos y dudas directamente por correo.</p>
       </article>
       <article class="contact-card">
         <h2>Instagram</h2>
         <p><a href="https://www.instagram.com/jhugo3d/" target="_blank">@jhugo3d</a></p>
-        <p>Para sugerencias, mensajes rápidos y novedades.</p>
+        <p>Para mensajes rápidos, sugerencias y ver proyectos recientes.</p>
       </article>
       <article class="contact-card">
         <h2>TikTok</h2>
@@ -29,18 +29,18 @@ description: "Contacta con Jhugo3D por email o Instagram para pedidos, ideas y p
       <article class="contact-card">
         <h2>Ubicación</h2>
         <p>Reus, Tarragona</p>
-        <p>Envíos y recogida a convenir.</p>
+        <p>Recogida y envíos a convenir.</p>
       </article>
     </div>
 
-    <div class="section--bordered">
+    <div class="section section--bordered">
       <div class="container">
-        <h2>¿Cómo pedir?</h2>
+        <h2>Cómo pedir</h2>
         <ol class="feature-list">
-          <li>Elige un diseño del <a href="/catalogo/">catálogo</a> o descríbenos tu idea.</li>
-          <li>Escríbenos por email o Instagram con lo que necesitas.</li>
-          <li>Te confirmamos disponibilidad, plazo y precio.</li>
-          <li>Acuerdas entrega o recogida.</li>
+          <li>Elige un diseño del <a href="/catalogo/">catálogo</a> o cuéntanos tu idea.</li>
+          <li>Escríbenos por email o Instagram.</li>
+          <li>Te respondemos con precio y plazo.</li>
+          <li>Confirmamos entrega o recogida en Reus.</li>
         </ol>
       </div>
     </div>

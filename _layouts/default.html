@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ page.title }} | {{ site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description }}" />
+    <title>{{ page.title }} | {{ site.title }}</title>
+    <link rel="icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
   <body>
@@ -23,13 +24,29 @@
           <a href="/contacto/" class="nav-link{% if page.url == "/contacto/" %} active{% endif %}">Contacto</a>
         </nav>
 
-        <a href="/catalogo/" class="btn btn-primary header-cta">Ver catálogo</a>
+        <div class="header-actions">
+          <button class="menu-toggle" aria-expanded="false" aria-label="Abrir menú">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <a href="/catalogo/" class="btn btn-primary header-cta">Catálogo</a>
+        </div>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu" hidden>
+        <nav class="mobile-nav" aria-label="Menú móvil">
+          <a href="/">Inicio</a>
+          <a href="/catalogo/">Catálogo</a>
+          <a href="/personalizado/">Personalizado</a>
+          <a href="/proceso/">Proceso</a>
+          <a href="/sobre/">Sobre</a>
+          <a href="/contacto/">Contacto</a>
+        </nav>
       </div>
     </header>
 
-    <main class="site-main">
-      {{ content }}
-    </main>
+    <main class="site-main">{{ content }}</main>
 
     <footer class="site-footer">
       <div class="container footer-inner">
@@ -38,7 +55,7 @@
           <p class="footer-text">Impresión 3D personalizada desde Reus.</p>
         </div>
         <div class="footer-links">
-          <a href="/contacto/">Contactar</a>
+          <a href="/contacto/">Contacto</a>
           <a href="/catalogo/">Catálogo</a>
         </div>
       </div>
@@ -46,5 +63,10 @@
         <p>&copy; {{ site.time | date: '%Y' }} Jhugo3D. Todos los derechos reservados.</p>
       </div>
     </footer>
+
+    <script src="/assets/scripts.js" defer></script>
+    <script src="/cart/cart.js" defer></script>
+    <script src="/chat/chat-widget.js" defer></script>
+    <script src="/cursor/cursor.js" defer></script>
   </body>
 </html>

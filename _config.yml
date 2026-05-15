@@ -7,6 +7,12 @@ collections:
   productos:
     output: true
     permalink: /productos/:name/
+defaults:
+  - scope:
+      path: ""
+      type: "productos"
+    values:
+      layout: producto
 exclude:
   - jhugo3d
   - node_modules
