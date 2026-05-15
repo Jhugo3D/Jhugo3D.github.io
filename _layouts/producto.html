@@ -4,14 +4,16 @@ layout: default
 
 <section class="section">
   <div class="container product-detail-grid">
+    {% assign page_image = page.imagen | default: '/img/productos/' | append: page.basename | append: '.jpg' %}
+    {% assign page_price = page.precioTexto | default: page.precio | append: '€' %}
     <div class="product-detail-media">
-      <img src="{{ page.imagen }}" alt="{{ page.nombre }}" class="product-detail-image" />
+      <img src="{{ page_image }}" alt="{{ page.nombre }}" class="product-detail-image" />
     </div>
 
     <div class="product-detail-info">
       <p class="eyebrow">{{ site.data.categories[page.categoria] | default: page.categoria }}</p>
       <h1>{{ page.nombre | default: page.title }}</h1>
-      <p class="product-price">{{ page.precioTexto | default: page.precio }}</p>
+      <p class="product-price">{{ page_price }}</p>
       {% if page.precioVariante %}
       <p class="product-variant">{{ page.precioVariante }}</p>
       {% endif %}
@@ -22,8 +24,8 @@ layout: default
         data-slug="{{ page.slug | default: page.basename }}"
         data-nombre="{{ page.nombre | default: page.title }}"
         data-precio="{{ page.precio }}"
-        data-preciotexto="{{ page.precioTexto | default: page.precio }}"
-        data-imagen="{{ page.imagen }}"
+        data-preciotexto="{{ page_price }}"
+        data-imagen="{{ page_image }}"
       >
         + Añadir al carrito
       </button>

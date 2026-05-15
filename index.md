@@ -51,10 +51,13 @@ description: "Impresión 3D personalizada de piezas únicas desde Reus. Catálog
         {% assign destacados = site.productos | slice: 0,4 %}
       {% endif %}
       {% for product in destacados %}
+      {% assign product_url = product.url | default: '/producto/' | append: product.basename | append: '/' %}
+      {% assign product_image = product.imagen | default: '/img/productos/' | append: product.basename | append: '.jpg' %}
+      {% assign product_price = product.precioTexto | default: product.precio | append: '€' %}
       <article class="product-card card reveal" data-categoria="{{ product.categoria }}">
-        <a href="{{ product.url }}" class="card-link">
+        <a href="{{ product_url }}" class="card-link">
           <div class="card-img-wrap">
-            <img src="{{ product.imagen }}" alt="{{ product.nombre }}" loading="lazy" decoding="async" />
+            <img src="{{ product_image }}" alt="{{ product.nombre }}" loading="lazy" decoding="async" />
             {% if product.destacado %}
             <span class="card-badge badge badge-gold">Destacado</span>
             {% endif %}
@@ -63,7 +66,7 @@ description: "Impresión 3D personalizada de piezas únicas desde Reus. Catálog
             <span class="card-cat badge">{{ site.data.categories[product.categoria] | default: product.categoria }}</span>
             <h3 class="card-name">{{ product.nombre }}</h3>
             <div class="card-price">
-              <span class="price-num">{{ product.precioTexto }}</span>
+              <span class="price-num">{{ product_price }}</span>
               {% if product.precioVariante %}
               <span class="price-variant">{{ product.precioVariante }}</span>
               {% endif %}
@@ -74,7 +77,7 @@ description: "Impresión 3D personalizada de piezas únicas desde Reus. Catálog
           <button class="nota-toggle" type="button" aria-expanded="false" data-label-open="✎ Personalizar" data-label-close="✕ Cerrar personalización">✎ Personalizar</button>
           <textarea class="nota-input" placeholder="Color, texto, nombre, tamaño..." rows="2" hidden></textarea>
         </div>
-        <button class="jh-add-btn" data-slug="{{ product.slug | default: product.basename }}" data-nombre="{{ product.nombre }}" data-precio="{{ product.precio }}" data-preciotexto="{{ product.precioTexto | default: product.precio }}" data-imagen="{{ product.imagen }}">+ Añadir al carrito</button>
+        <button class="jh-add-btn" data-slug="{{ product.slug | default: product.basename }}" data-nombre="{{ product.nombre }}" data-precio="{{ product.precio }}" data-preciotexto="{{ product_price }}" data-imagen="{{ product_image }}">+ Añadir al carrito</button>
       </article>
       {% endfor %}
     </div>
