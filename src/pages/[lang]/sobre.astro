@@ -1,0 +1,83 @@
+﻿---
+import Layout from '../../components/Layout.astro';
+import { t, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'ca' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const prefix = `/${lang}`;
+---
+
+<Layout title={t(lang, 'nav.sobre')} description={t(lang, 'sobre.sub')}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">{t(lang, 'sobre.eyebrow')}</p>
+      <h1>{t(lang, 'sobre.heading')}</h1>
+      <p class="page-sub">{t(lang, 'sobre.sub')}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-layout">
+      <div class="about-img-col">
+        <div class="about-img-wrap">
+          <img src="/img/creator.png" alt="Jhugo3D — Hugo, creador" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div class="ig-card">
+          <img src="/img/profile.jpg" alt="@jhugo3d en Instagram" class="ig-avatar" width="48" height="48" loading="lazy" />
+          <div>
+            <p class="ig-handle">@jhugo3d</p>
+            <p class="ig-label">Instagram</p>
+          </div>
+          <a href="https://www.instagram.com/jhugo3d/" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+            {lang === 'en' ? 'Follow' : 'Seguir'}
+          </a>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <h2>{t(lang, 'sobre.hola')}</h2>
+        <p>{t(lang, 'sobre.p1')}</p>
+        <p>{t(lang, 'sobre.p2')}</p>
+        <p>{t(lang, 'sobre.p3')}</p>
+        <blockquote class="about-quote">
+          <p>"{t(lang, 'sobre.quote')}"</p>
+        </blockquote>
+        <div class="about-values">
+          <span>✦ {t(lang, 'sobre.v1')}</span>
+          <span>✦ {t(lang, 'sobre.v2')}</span>
+          <span>✦ {t(lang, 'sobre.v3')}</span>
+        </div>
+        <div class="about-ctas">
+          <a href={`${prefix}/catalogo`} class="btn btn-primary">{t(lang, 'sobre.btnCat')}</a>
+          <a href={`${prefix}/personalizado`} class="btn btn-outline">{t(lang, 'sobre.btnPers')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.page-hero { padding-top: calc(64px + 3.5rem); padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+.page-hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin-top: 0.5rem; }
+.page-sub { color: var(--text-muted); margin-top: 0.5rem; max-width: 56ch; }
+.about-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 5rem; align-items: start; }
+.about-img-col { display: flex; flex-direction: column; gap: 1.5rem; position: sticky; top: calc(64px + 1.5rem); }
+.about-img-wrap { aspect-ratio: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; overflow:hidden; }
+.ig-card { display: flex; align-items: center; gap: 0.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.85rem; }
+.ig-avatar { border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.ig-handle { font-weight: 600; font-size: 0.9rem; }
+.ig-label { font-size: 0.75rem; color: var(--text-subtle); }
+.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.8rem; margin-left: auto; flex-shrink: 0; }
+.about-text { display: flex; flex-direction: column; gap: 1.25rem; padding-top: 0.5rem; }
+.about-text h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+.about-text p { color: var(--text-muted); line-height: 1.8; }
+.about-quote { border-left: 2px solid var(--gold); padding-left: 1.5rem; margin: 0.5rem 0; }
+.about-quote p { font-size: 1.1rem; font-style: italic; color: var(--text); line-height: 1.6; }
+.about-values { display: flex; flex-direction: column; gap: 0.5rem; }
+.about-values span { color: var(--text-muted); font-size: 0.9rem; }
+.about-ctas { display: flex; gap: 1rem; flex-wrap: wrap; padding-top: 0.5rem; }
+@media (max-width: 760px) { .about-layout { grid-template-columns: 1fr; gap: 2rem; } .about-img-col { position: static; } }
+</style>

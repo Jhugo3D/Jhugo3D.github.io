@@ -1,0 +1,199 @@
+---
+import Layout from '../components/Layout.astro';
+---
+
+<Layout
+  title="Sobre Jhugo3D"
+  description="Conoce a Hugo, el creador de Jhugo3D. Diseño y creación de modelos 3D personalizados en Reus."
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">La marca</p>
+      <h1>Sobre <span class="text-gold">Jhugo3D</span></h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-layout">
+
+      <!-- Foto -->
+      <div class="about-img-col reveal">
+        <div class="creator-img-wrap">
+          <img src="/img/creator.png" alt="Jhugo3D — Hugo, creador" class="creator-photo" />
+        </div>
+        <div class="ig-card reveal">
+          <img src="/img/ig/profile.jpg" alt="Foto de perfil de Jhugo3D" width="48" height="48" class="ig-avatar" />
+          <div>
+            <p class="ig-name">@jhugo3d</p>
+            <a href="https://www.instagram.com/jhugo3d/" target="_blank" rel="noopener" class="ig-follow">
+              Ver en Instagram →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Texto -->
+      <div class="about-text reveal">
+        <h2 class="about-h2">Hola, soy Hugo</h2>
+        <p>
+          Siempre me ha apasionado el mundo del diseño y la tecnología, y desde que descubrí la
+          impresión 3D supe que era la forma perfecta de unir ambas cosas.
+        </p>
+        <p>
+          En Jhugo3D me dedico a diseñar y crear modelos 3D personalizados, adaptados a las ideas
+          y necesidades de cada persona. Me encanta transformar conceptos en objetos reales y ver
+          cómo una idea puede cobrar vida capa a capa.
+        </p>
+        <p>
+          Soy una persona creativa, curiosa y detallista, y disfruto mucho trabajando en proyectos
+          únicos. Si tienes una idea en mente, estaré encantado de ayudarte a hacerla realidad.
+        </p>
+
+        <blockquote class="about-quote reveal">
+          "Nada es imposible, solo tienes que creerlo."
+        </blockquote>
+
+        <div class="about-values reveal">
+          <div class="value">
+            <span class="value-icon">✦</span>
+            <div>
+              <h3>Creatividad sin límites</h3>
+              <p>Si lo puedes imaginar, lo podemos imprimir. Ningún diseño es demasiado raro para intentarlo.</p>
+            </div>
+          </div>
+          <div class="value">
+            <span class="value-icon">✦</span>
+            <div>
+              <h3>Atención al detalle</h3>
+              <p>Cada pieza pasa por revisión manual antes de salir. No enviamos nada que no cumpla el estándar.</p>
+            </div>
+          </div>
+          <div class="value">
+            <span class="value-icon">✦</span>
+            <div>
+              <h3>Trato directo</h3>
+              <p>Hablas con Hugo, no con un chatbot. Las sugerencias son bienvenidas al DM.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-cta reveal">
+          <a href="/catalogo" class="btn btn-primary">Ver el catálogo</a>
+          <a href="/personalizado" class="btn btn-outline">Pedir personalizado</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+.page-hero {
+  padding-top: calc(64px + 4rem);
+  padding-bottom: 4rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin-top: 0.5rem; }
+
+.about-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+/* Image column */
+.about-img-col { display: flex; flex-direction: column; gap: 1rem; }
+
+.creator-img-wrap {
+  aspect-ratio: 4/5;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.creator-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ig-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+}
+.ig-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--brand);
+}
+.ig-name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; }
+.ig-follow { font-size: 0.8rem; color: var(--gold); }
+.ig-follow:hover { color: var(--gold-bright); }
+
+/* Text column */
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.5rem;
+}
+.about-h2 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin-bottom: 0.25rem;
+}
+.about-text p {
+  color: var(--text-muted);
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.about-quote {
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.5rem;
+  margin: 0.5rem 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--text);
+  background: rgba(212,168,50,0.05);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.about-values {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+.value {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.value-icon { color: var(--gold); font-size: 0.85rem; flex-shrink: 0; padding-top: 0.2rem; }
+.value h3 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+.value p  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.55; }
+
+.about-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 860px) {
+  .about-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .about-img-col { flex-direction: row; }
+  .img-placeholder { display: none; }
+}
+</style>

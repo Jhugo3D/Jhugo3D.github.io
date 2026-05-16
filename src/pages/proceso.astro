@@ -1,0 +1,210 @@
+---
+import Layout from '../components/Layout.astro';
+
+const pasos = [
+  {
+    num: '01',
+    titulo: 'Diseño',
+    desc: 'Todo empieza en el ordenador. Si tienes un archivo (STL, STEP, OBJ) lo usamos directamente. Si tienes solo una idea, la modelamos en 3D. La forma determina todo lo que viene después.',
+  },
+  {
+    num: '02',
+    titulo: 'Laminado',
+    desc: 'El modelo 3D se "lamina": un software lo divide en capas finísimas y genera las instrucciones que la impresora entiende. Aquí se ajusta la resolución, el relleno interior y los soportes necesarios.',
+  },
+  {
+    num: '03',
+    titulo: 'Impresión',
+    desc: 'La impresora deposita material capa a capa, de abajo hacia arriba. Según el tamaño y la complejidad, el proceso puede durar desde minutos hasta horas. Supervisamos cada pieza.',
+  },
+  {
+    num: '04',
+    titulo: 'Acabado',
+    desc: 'Retiramos soportes, lijamos si hace falta, revisamos la pieza. El objetivo es que cuando llegue a tus manos esté lista para usar — no como prototipo, sino como producto terminado.',
+  },
+];
+---
+
+<Layout
+  title="Cómo lo hacemos"
+  description="Cómo funciona la impresión 3D en Jhugo3D: diseño, laminado, impresión y acabado explicados paso a paso."
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">El proceso</p>
+      <h1>Cómo lo <span class="text-gold">hacemos</span></h1>
+      <p class="hero-sub">
+        La impresión 3D transforma un archivo digital en un objeto real, capa a capa.
+        Este es el proceso que seguimos en cada pedido.
+      </p>
+    </div>
+  </section>
+
+  <!-- Pasos -->
+  <section class="section">
+    <div class="container">
+      <div class="pasos">
+        {pasos.map((p, i) => (
+          <div class="paso reveal">
+            <div class="paso-num">{p.num}</div>
+            <div class="paso-body">
+              <h2 class="paso-title">{p.titulo}</h2>
+              <p class="paso-desc">{p.desc}</p>
+            </div>
+            {i < pasos.length - 1 && (
+              <div class="paso-arrow" aria-hidden="true">↓</div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Materiales -->
+  <section class="section mat-section">
+    <div class="container">
+      <p class="eyebrow reveal">Materiales</p>
+      <h2 class="section-title reveal">¿Con qué imprimimos?</h2>
+      <p class="section-sub reveal">
+        [REVISAR] Añade aquí los materiales que usas: PLA, PETG, resina, TPU…
+        Indica las características de cada uno y para qué tipo de proyectos los utilizas.
+      </p>
+      <div class="mat-placeholder reveal">
+        <div class="mat-card">
+          <h3>[Material 1]</h3>
+          <p>[REVISAR] Descripción del material, propiedades, usos.</p>
+        </div>
+        <div class="mat-card">
+          <h3>[Material 2]</h3>
+          <p>[REVISAR] Descripción del material, propiedades, usos.</p>
+        </div>
+        <div class="mat-card">
+          <h3>[Material 3]</h3>
+          <p>[REVISAR] Descripción del material, propiedades, usos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container" style="max-width: var(--max-w-text);">
+      <h2 class="section-title reveal" style="font-size: clamp(1.5rem, 4vw, 2rem);">Preguntas frecuentes</h2>
+      <div class="faq">
+        <details class="faq-item reveal">
+          <summary>¿Cuánto tarda en llegar mi pedido?</summary>
+          <p>[REVISAR] Indica el plazo habitual de entrega. Por ejemplo: "3-7 días hábiles según tamaño y complejidad".</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>¿Puedo pedir un diseño que no está en el catálogo?</summary>
+          <p>Sí. Escríbenos a <a href="mailto:soportejhugo3d@gmail.com">soportejhugo3d@gmail.com</a> o por Instagram <a href="https://www.instagram.com/jhugo3d/" target="_blank" rel="noopener">@jhugo3d</a> con tu idea y te respondemos con presupuesto y plazo.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>¿Aceptáis archivos propios (STL, STEP, OBJ)?</summary>
+          <p>Sí. Envíalos por email a <a href="mailto:soportejhugo3d@gmail.com">soportejhugo3d@gmail.com</a>. Revisamos el archivo y te confirmamos si es imprimible o si necesita ajustes.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>¿Cómo pago?</summary>
+          <p>[REVISAR] Añade aquí los métodos de pago que aceptas.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.page-hero {
+  padding-top: calc(64px + 4rem);
+  padding-bottom: 4rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin-top: 0.5rem; }
+.hero-sub { color: var(--text-muted); max-width: 60ch; margin-top: 1rem; line-height: 1.7; }
+
+/* Pasos */
+.pasos {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.paso {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 1.5rem;
+  position: relative;
+}
+.paso-num {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  padding-top: 0.2rem;
+  flex-shrink: 0;
+}
+.paso-body { padding-bottom: 2.5rem; }
+.paso-title { font-size: 1.35rem; margin-bottom: 0.6rem; }
+.paso-desc { color: var(--text-muted); line-height: 1.7; }
+.paso-arrow {
+  position: absolute;
+  left: 33px;
+  bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: var(--border-2);
+}
+
+/* Materiales */
+.mat-section { background: var(--surface); }
+.mat-placeholder {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.mat-card {
+  background: var(--bg);
+  border: 1.5px dashed var(--border-2);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.mat-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-subtle); }
+.mat-card p  { font-size: 0.875rem; color: var(--text-subtle); }
+
+/* FAQ */
+.faq { display: flex; flex-direction: column; margin-top: 2rem; }
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding-block: 1.25rem;
+}
+.faq-item summary {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.2rem;
+  color: var(--gold);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p {
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+.faq-item a { color: var(--gold); }
+
+@media (max-width: 600px) {
+  .mat-placeholder { grid-template-columns: 1fr; }
+  .paso { grid-template-columns: 48px 1fr; gap: 1rem; }
+}
+</style>

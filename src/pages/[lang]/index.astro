@@ -1,0 +1,152 @@
+﻿---
+import Layout from '../../components/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { t, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'ca' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const prefix = `/${lang}`;
+
+const productos = await getCollection('productos');
+const destacados = productos.filter(p => p.data.destacado).slice(0, 4);
+const marqueeItems = t(lang, 'index.marquee').split('|');
+---
+
+<Layout title="Jhugo3D" description={t(lang, 'index.sub')}>
+  <section class="hero">
+    <video class="hero-video" src="/video/hero.mp4" autoplay loop muted playsinline preload="auto"></video>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <svg class="hero-stars" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <g class="star-group" fill="none" stroke="rgba(212,168,50,0.55)" stroke-linecap="round">
+        <line x1="112" y1="148" x2="112" y2="156"/><line x1="108" y1="152" x2="116" y2="152"/>
+        <line x1="1318" y1="210" x2="1318" y2="218"/><line x1="1314" y1="214" x2="1322" y2="214"/>
+        <line x1="420"  y1="80"  x2="420"  y2="88" /><line x1="416"  y1="84"  x2="424"  y2="84" />
+        <circle cx="730" cy="140" r="1.2"/><circle cx="1260" cy="380" r="1.2"/>
+      </g>
+    </svg>
+    <div class="container hero-content">
+      <span class="eyebrow hero-eyebrow">{t(lang, 'index.eyebrow')}</span>
+      <h1 class="hero-title">
+        {t(lang, 'index.title1')}<br />
+        <span class="text-gold">{t(lang, 'index.titleGold')}</span>
+      </h1>
+      <p class="hero-sub">{t(lang, 'index.sub')}</p>
+      <div class="hero-actions">
+        <a href={`${prefix}/catalogo`} class="btn btn-primary">{t(lang, 'index.btnCatalogo')}</a>
+        <a href={`${prefix}/personalizado`} class="btn btn-outline">{t(lang, 'index.btnPersonalizado')}</a>
+      </div>
+    </div>
+    <div class="hero-stats container">
+      <div class="stat"><span class="stat-n">101</span><span class="stat-l">{t(lang, 'index.statPosts')}</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-n">48+</span><span class="stat-l">{t(lang, 'index.statDisenos')}</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-n">3€</span><span class="stat-l">{t(lang, 'index.statDesde')}</span></div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><div class="scroll-line"></div></div>
+  </section>
+
+  <div class="marquee-outer" aria-hidden="true">
+    <div class="marquee-track">
+      {[...marqueeItems, ...marqueeItems].map((item) => (
+        <><span class="marquee-item">{item}</span><span class="marquee-sep">✦</span></>
+      ))}
+    </div>
+  </div>
+
+  {destacados.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">{t(lang, 'index.masPopulares')}</p>
+        <h2 class="section-title">{t(lang, 'index.destacadosH')}</h2>
+        <p class="section-sub">{t(lang, 'index.destacadosSub')}</p>
+        <div class="product-grid">
+          {destacados.map((p, i) => (
+            <ProductCard
+              slug={p.slug}
+              nombre={p.data.nombre}
+              precio={p.data.precio}
+              precioTexto={p.data.precioTexto}
+              precioVariante={p.data.precioVariante}
+              categoria={p.data.categoria}
+              imagen={p.data.imagen}
+              destacado={true}
+              lazy={i > 1}
+              lang={lang}
+              prodPrefix={`${prefix}/producto`}
+            />
+          ))}
+        </div>
+        <div class="all-cta">
+          <a href={`${prefix}/catalogo`} class="btn btn-outline">{t(lang, 'index.ver48')}</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section how-section section--bordered">
+    <div class="container">
+      <p class="eyebrow reveal">{t(lang, 'index.procesoEyebrow')}</p>
+      <h2 class="section-title reveal">{t(lang, 'index.procesoH')}</h2>
+      <p class="section-sub reveal">{t(lang, 'index.procesoSub')}</p>
+      <div class="steps">
+        <div class="step reveal"><span class="step-n">01</span><h3 class="step-title">{t(lang, 'index.step1Title')}</h3><p class="step-desc">{t(lang, 'index.step1Desc')}</p></div>
+        <div class="step reveal"><span class="step-n">02</span><h3 class="step-title">{t(lang, 'index.step2Title')}</h3><p class="step-desc">{t(lang, 'index.step2Desc')}</p></div>
+        <div class="step reveal"><span class="step-n">03</span><h3 class="step-title">{t(lang, 'index.step3Title')}</h3><p class="step-desc">{t(lang, 'index.step3Desc')}</p></div>
+      </div>
+      <div class="reveal" style="margin-top: 2.5rem;">
+        <a href={`${prefix}/proceso`} class="btn btn-ghost">{t(lang, 'index.masProceso')}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="container cta-inner">
+      <div class="cta-text reveal"><h2>{t(lang, 'index.ctaH')}</h2><p>{t(lang, 'index.ctaSub')}</p></div>
+      <div class="cta-actions reveal">
+        <a href={`${prefix}/personalizado`} class="btn btn-primary">{t(lang, 'index.ctaBtn1')}</a>
+        <a href="mailto:soportejhugo3d@gmail.com" class="btn btn-outline">{t(lang, 'index.ctaBtn2')}</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.hero { position: relative; height: 100svh; width: 100%; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.hero-overlay { position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse 65% 55% at 12% 50%, rgba(212,168,50,0.07) 0%, transparent 65%), linear-gradient(to top, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.45) 42%, transparent 65%), rgba(0,0,0,0.2); }
+.hero-content { position: relative; z-index: 2; padding-top: 80px; padding-bottom: 120px; }
+@keyframes hero-rise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
+.hero-eyebrow { animation: hero-rise 0.8s var(--ease-out) 0.05s both; display: block; margin-bottom: 1.25rem; }
+.hero-title   { animation: hero-rise 0.9s var(--ease-out) 0.2s  both; font-size: clamp(3rem, 9vw, 6.5rem); line-height: 1.0; margin-bottom: 1.5rem; }
+.hero-sub     { animation: hero-rise 0.9s var(--ease-out) 0.4s  both; font-size: clamp(1rem, 2vw, 1.15rem); color: rgba(240,240,240,0.65); max-width: 52ch; margin-bottom: 2.25rem; }
+.hero-actions { animation: hero-rise 0.8s var(--ease-out) 0.58s both; display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-title .text-gold { background: linear-gradient(130deg, #B8850A 0%, #F0C040 40%, #D4A832 70%, #E8C060 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-stats { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; display: flex; align-items: center; gap: 2.5rem; padding-block: 1.25rem 1.75rem; background: linear-gradient(to top, rgba(8,8,8,0.75) 0%, transparent 100%); }
+.stat { display: flex; flex-direction: column; }
+.stat-n { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--gold); line-height: 1; }
+.stat-l { font-size: 0.75rem; font-family: var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 0.25rem; }
+.stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.1); }
+.scroll-hint { position: absolute; bottom: 5.5rem; left: 50%; transform: translateX(-50%); z-index: 3; }
+.scroll-line { width: 1px; height: 44px; background: linear-gradient(to bottom, rgba(212,168,50,0.8), transparent); animation: jh-line 1.8s infinite; }
+@keyframes jh-line { 0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom;opacity:0} }
+.how-section { background: var(--surface); }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 0.5rem; }
+.step { padding: 2rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); position: relative; overflow: hidden; }
+.step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--gold) 80%, transparent 100%); }
+.step-n { display: block; font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.75rem; }
+.step-title { font-size: 1.15rem; margin-bottom: 0.6rem; }
+.step-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+.cta-banner { background: var(--surface); border-top: 1px solid var(--border); padding-block: 5rem; }
+.cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+.cta-text h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); margin-bottom: 0.5rem; }
+.cta-text p { color: var(--text-muted); max-width: 48ch; }
+.cta-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.all-cta { text-align: center; margin-top: 3rem; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } .cta-inner { flex-direction: column; } }
+@media (max-width: 480px) { .hero-actions { flex-direction: column; } .hero-stats { gap: 1.25rem; } .stat-divider { display: none; } }
+</style>

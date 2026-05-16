@@ -1,0 +1,276 @@
+---
+import Layout from '../../components/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const productos = await getCollection('productos');
+  return productos.map(p => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const producto = await getEntry('productos', slug!);
+if (!producto) return Astro.redirect('/404');
+
+const { nombre, precio, precioTexto, precioVariante, categoria, imagen, descripcion } = producto.data;
+const { Content } = await producto.render();
+
+const catLabels: Record<string, string> = {
+  joyeria: 'Joyería', soportes: 'Soportes', figuras: 'Figuras',
+  marcos: 'Marcos', decoracion: 'Decoración',
+};
+
+// Related products (same category, different slug, max 3)
+const todos = await getCollection('productos');
+const relacionados = todos
+  .filter(p => p.data.categoria === categoria && p.slug !== slug)
+  .slice(0, 3);
+
+const mailSubject = encodeURIComponent(`Pedido: ${nombre}`);
+const mailBody = encodeURIComponent(
+  `Hola Hugo,\n\nMe interesa este producto:\n- ${nombre} (${precioTexto}${precioVariante ? ' ' + precioVariante : ''})\n\n[Describe aquí lo que necesitas]\n\nGracias,\n[Tu nombre]`
+);
+---
+
+<Layout
+  title={nombre}
+  description={descripcion ?? `${nombre} — ${precioTexto}. Pieza impresa en 3D disponible en Jhugo3D.`}
+  ogImage={imagen}
+>
+  <div class="prod-back">
+    <div class="container">
+      <a href="/catalogo" class="back-link">← Volver al catálogo</a>
+    </div>
+  </div>
+
+  <section class="prod-section">
+    <div class="container prod-layout">
+
+      <!-- Image -->
+      <div class="prod-img-wrap">
+        <img
+          src={imagen}
+          alt={nombre}
+          width="600"
+          height="600"
+          loading="eager"
+          decoding="async"
+          class="prod-img"
+        />
+      </div>
+
+      <!-- Info -->
+      <div class="prod-info">
+        <span class="badge">{catLabels[categoria] ?? categoria}</span>
+
+        <h1 class="prod-name">{nombre}</h1>
+
+        <div class="prod-price">
+          <span class="price-big">{precioTexto}</span>
+          {precioVariante && <span class="price-var">{precioVariante}</span>}
+        </div>
+
+        {descripcion && (
+          <div class="prod-desc">
+            <Content />
+          </div>
+        )}
+
+        <div class="prod-nota">
+          <label for="prodNota" class="nota-label">
+            Personalización <span class="nota-opt">— opcional</span>
+          </label>
+          <textarea
+            id="prodNota"
+            class="nota-textarea"
+            placeholder="Color, texto a imprimir, nombre, medidas, cualquier detalle que quieras…"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="prod-actions">
+          <button
+            class="btn btn-primary btn-lg jh-add-btn"
+            data-slug={slug}
+            data-nombre={nombre}
+            data-precio={precio}
+            data-preciotexto={precioTexto}
+            data-imagen={imagen}
+          >
+            + Añadir al carrito
+          </button>
+          <a href="/personalizado" class="btn btn-outline">
+            ¿Quieres algo personalizado?
+          </a>
+        </div>
+
+        <div class="prod-meta">
+          <div class="meta-row">
+            <span class="meta-key">Contacto</span>
+            <span class="meta-val">soportejhugo3d@gmail.com</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Categoría</span>
+            <span class="meta-val">{catLabels[categoria]}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">Plazo</span>
+            <span class="meta-val">Consultar al pedir</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Related -->
+  {relacionados.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 1.5rem;">También te puede interesar</h2>
+        <div class="product-grid" style="grid-template-columns: repeat(3, 1fr);">
+          {relacionados.map(p => (
+            <ProductCard
+              slug={p.slug}
+              nombre={p.data.nombre}
+              precio={p.data.precio}
+              precioTexto={p.data.precioTexto}
+              precioVariante={p.data.precioVariante}
+              categoria={p.data.categoria}
+              imagen={p.data.imagen}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+.prod-back {
+  padding-top: calc(64px + 1.5rem);
+  padding-bottom: 1rem;
+}
+.back-link {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: color 0.15s;
+}
+.back-link:hover { color: var(--gold); }
+
+.prod-section { padding-bottom: 5rem; }
+
+.prod-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.prod-img-wrap {
+  position: sticky;
+  top: calc(64px + 1.5rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.prod-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prod-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.prod-name {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  line-height: 1.15;
+}
+
+.prod-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.price-big {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+.price-var { color: var(--text-muted); }
+
+.prod-desc {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.prod-nota {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.nota-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+.nota-opt {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-subtle);
+  opacity: 0.7;
+}
+.nota-textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+  min-height: 80px;
+}
+.nota-textarea:focus { border-color: var(--gold); }
+.nota-textarea::placeholder { color: var(--text-subtle); }
+
+.prod-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.btn-lg { padding: 1rem 2rem; font-size: 1rem; }
+
+.prod-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.meta-row { display: flex; justify-content: space-between; font-size: 0.875rem; }
+.meta-key { color: var(--text-subtle); }
+.meta-val { color: var(--text-muted); }
+
+@media (max-width: 760px) {
+  .prod-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .prod-img-wrap { position: static; }
+  .product-grid { grid-template-columns: 1fr !important; }
+}
+</style>

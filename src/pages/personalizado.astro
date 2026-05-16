@@ -1,0 +1,199 @@
+---
+import Layout from '../components/Layout.astro';
+
+const casos = [
+  { icon: '🪪', titulo: 'Tarjetero personalizado', desc: 'Tu diseño, tu nombre, tu marca. Tarjeteros únicos con la forma que imagines.' },
+  { icon: '🖼️', titulo: 'Marco con tu foto', desc: 'Sube tu imagen favorita y la convertimos en un marco 3D con relieve propio.' },
+  { icon: '💍', titulo: 'Joyería a medida', desc: 'Anillos, colgantes, pendientes. Si tienes el diseño (o la idea), lo imprimimos.' },
+  { icon: '🗿', titulo: 'Figuras y esculturas', desc: 'Personajes, logos, piezas artísticas. Sin límites de forma si tienes el archivo.' },
+];
+
+const mailSubject = encodeURIComponent('Solicitud de impresión personalizada');
+const mailBody = encodeURIComponent(
+  `Hola Hugo,\n\nQuiero solicitar una impresión personalizada.\n\nNombre: \nContacto: \nDescripción del proyecto: \n\nGracias,`
+);
+---
+
+<Layout
+  title="Impresión personalizada"
+  description="Envíanos tu idea o archivo y lo imprimimos. Servicio de impresión 3D personalizada en Reus."
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Servicio a medida</p>
+      <h1>Impresión <span class="text-gold">personalizada</span></h1>
+      <p class="hero-sub">
+        Tienes una idea, nosotros tenemos la impresora. Mándanos tu archivo STL, STEP u OBJ —
+        o descríbenos lo que necesitas — y te respondemos con presupuesto y plazo.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container two-col">
+
+      <!-- Casos de uso -->
+      <div class="casos">
+        <h2 class="section-title reveal" style="font-size: clamp(1.5rem, 4vw, 2.25rem);">¿Para qué lo usan?</h2>
+        <p class="section-sub reveal">Estos son algunos proyectos reales que ya hemos hecho.</p>
+        <div class="casos-grid">
+          {casos.map(c => (
+            <div class="caso-card reveal">
+              <span class="caso-icon">{c.icon}</span>
+              <h3>{c.titulo}</h3>
+              <p>{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="form-col reveal">
+        <div class="form-card">
+          <h2>Cuéntanos tu proyecto</h2>
+          <p class="form-sub">Rellenamos el mensaje por ti. Se enviará por WhatsApp.</p>
+
+          <form class="contact-form" id="custom-form">
+            <div class="field">
+              <label for="fname">Nombre</label>
+              <input type="text" id="fname" name="nombre" placeholder="Tu nombre" required />
+            </div>
+            <div class="field">
+              <label for="femail">Email o Instagram</label>
+              <input type="text" id="femail" name="contacto" placeholder="tu@email.com o @tu_handle" required />
+            </div>
+            <div class="field">
+              <label for="fdesc">Descripción del proyecto</label>
+              <textarea id="fdesc" name="descripcion" rows="5" placeholder="Describe la pieza: forma, tamaño aproximado, uso, cantidad..." required></textarea>
+            </div>
+            <p class="file-note">
+              ¿Tienes un archivo STL, STEP u OBJ? Adjúntalo directamente en el correo que se abrirá al enviar.
+            </p>
+            <button type="submit" class="btn btn-primary btn-full">
+              Enviar por WhatsApp →
+            </button>
+          </form>
+        </div>
+
+        <div class="alt-contact reveal">
+          <p>También puedes escribirnos directamente:</p>
+          <a href="mailto:soportejhugo3d@gmail.com" class="alt-email">
+            soportejhugo3d@gmail.com
+          </a>
+          <a href="https://www.instagram.com/jhugo3d/" target="_blank" rel="noopener" class="alt-ig">
+            DM en Instagram @jhugo3d
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Layout>
+
+<style>
+.page-hero {
+  padding-top: calc(64px + 4rem);
+  padding-bottom: 4rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin-top: 0.5rem; }
+.hero-sub {
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin-top: 1rem;
+  line-height: 1.7;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.casos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.caso-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.caso-icon { font-size: 1.75rem; display: block; margin-bottom: 0.6rem; }
+.caso-card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+.caso-card p  { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Form */
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+}
+.form-card h2 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+.form-sub { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem; }
+
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+.field label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+.field input, .field textarea {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s;
+  resize: vertical;
+}
+.field input:focus, .field textarea:focus { border-color: var(--gold); }
+.file-note { font-size: 0.8rem; color: var(--text-subtle); }
+.btn-full { width: 100%; justify-content: center; margin-top: 0.5rem; }
+
+.alt-contact {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+}
+.alt-contact p { color: var(--text-muted); }
+.alt-email, .alt-ig {
+  color: var(--gold);
+  transition: color 0.15s;
+}
+.alt-email:hover, .alt-ig:hover { color: var(--gold-bright); }
+
+@media (max-width: 860px) {
+  .two-col { grid-template-columns: 1fr; }
+  .casos-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .casos-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+document.getElementById('custom-form')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = e.target as HTMLFormElement;
+  const nombre = (form.elements.namedItem('nombre') as HTMLInputElement).value;
+  const contacto = (form.elements.namedItem('contacto') as HTMLInputElement).value;
+  const descripcion = (form.elements.namedItem('descripcion') as HTMLTextAreaElement).value;
+
+  const msg = `Hola Hugo,\n\nQuiero solicitar una impresión personalizada.\n\nNombre: ${nombre}\nContacto: ${contacto}\nDescripción del proyecto:\n${descripcion}\n\nGracias,\n${nombre}`;
+  window.open(`https://wa.me/34630481639?text=${encodeURIComponent(msg)}`);
+});
+</script>
