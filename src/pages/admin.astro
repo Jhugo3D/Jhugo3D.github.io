@@ -1,5 +1,4 @@
 ﻿---
-import Layout from '../components/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const productos = await getCollection('productos');
@@ -14,9 +13,11 @@ const productosData = productos.map(p => ({
   descripcion: p.data.descripcion ?? '',
   destacado: p.data.destacado ?? false,
 }));
+const nextNum = String(productosData.length + 1).padStart(2, '0');
+const nextSlug = 'p' + nextNum;
 ---
 
-<html lang="es">
+<html lang="ca">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,64 +27,106 @@ const productosData = productos.map(p => ({
     body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0a; color: #f0f0f0; min-height: 100vh; }
 
     /* LOGIN */
-    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
-    .login-card { background: #151515; border: 1px solid #232323; border-radius: 12px; padding: 2.5rem; width: 100%; max-width: 400px; }
-    .login-card h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .login-card p { color: #888; font-size: 0.875rem; margin-bottom: 2rem; }
-    .field { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
-    .field label { font-size: 0.8rem; font-weight: 600; color: #aaa; letter-spacing: 0.04em; text-transform: uppercase; }
-    .field input { background: #1e1e1e; border: 1.5px solid #2e2e2e; border-radius: 8px; padding: 0.75rem 1rem; color: #f0f0f0; font-size: 0.9rem; outline: none; transition: border-color 0.15s; }
-    .field input:focus { border-color: #D4A832; }
-    .btn-login { width: 100%; padding: 0.85rem; background: #D4A832; border: none; border-radius: 8px; color: #080808; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.15s; margin-top: 0.5rem; }
-    .btn-login:hover { background: #F0C040; }
-    .login-err { color: #e44; font-size: 0.8rem; margin-top: 0.75rem; text-align: center; display: none; }
-    .logo { font-size: 1.1rem; font-weight: 800; color: #D4A832; margin-bottom: 1.5rem; display: block; }
+    #login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:2rem; }
+    .login-card { background:#151515; border:1px solid #232323; border-radius:12px; padding:2.5rem; width:100%; max-width:380px; }
+    .login-logo { font-size:1.1rem; font-weight:800; color:#D4A832; margin-bottom:1.5rem; display:block; }
+    .login-card h1 { font-size:1.35rem; margin-bottom:.3rem; }
+    .login-card > p { color:#555; font-size:.85rem; margin-bottom:2rem; }
+    .login-err { color:#e44; font-size:.8rem; margin-top:.75rem; text-align:center; display:none; }
 
-    /* ADMIN PANEL */
-    #admin-panel { display: none; }
-    .admin-header { background: #151515; border-bottom: 1px solid #232323; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-    .admin-header h1 { font-size: 1rem; font-weight: 700; }
-    .admin-header span { font-size: 0.8rem; color: #888; }
-    .btn-logout { background: none; border: 1px solid #2e2e2e; border-radius: 6px; color: #888; font-size: 0.78rem; padding: 0.35rem 0.75rem; cursor: pointer; transition: all 0.15s; }
-    .btn-logout:hover { border-color: #e44; color: #e44; }
+    /* PANEL */
+    #admin-panel { display:none; }
+    .adm-header { background:#0d0d0d; border-bottom:1px solid #1a1a1a; padding:.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+    .adm-logo { font-weight:800; color:#D4A832; font-size:.95rem; margin-right:1.5rem; }
+    .adm-tabs { display:flex; gap:.2rem; }
+    .adm-tab { background:none; border:none; color:#555; font-size:.82rem; font-weight:600; padding:.4rem .85rem; border-radius:6px; cursor:pointer; transition:all .15s; }
+    .adm-tab.active { background:#1a1a1a; color:#D4A832; }
+    .adm-tab:hover:not(.active) { color:#f0f0f0; }
+    .btn-sm { background:none; border:1px solid #2e2e2e; border-radius:6px; color:#555; font-size:.72rem; padding:.3rem .7rem; cursor:pointer; transition:all .15s; }
+    .btn-sm:hover { border-color:#e44; color:#e44; }
 
-    .admin-content { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
-    .admin-stats { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-    .admin-stat { background: #151515; border: 1px solid #232323; border-radius: 8px; padding: 1rem 1.5rem; }
-    .admin-stat .n { font-size: 1.75rem; font-weight: 700; color: #D4A832; }
-    .admin-stat .l { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.2rem; }
+    .adm-body { padding:2rem 1.5rem; max-width:860px; margin:0 auto; }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
 
-    .section-title { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #1e1e1e; }
-    
-    /* Products table */
-    .prod-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
-    .prod-table th { text-align: left; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #555; padding: 0.5rem 0.75rem; border-bottom: 1px solid #232323; }
-    .prod-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; vertical-align: middle; }
-    .prod-table tr:hover td { background: #111; }
-    .prod-img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; background: #1e1e1e; }
-    .cat-badge { display: inline-block; padding: 0.15rem 0.5rem; background: #1e1e1e; border: 1px solid #2e2e2e; border-radius: 100px; font-size: 0.7rem; color: #888; }
-    .destacado-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #D4A832; }
-    .btn-edit { background: none; border: 1px solid #2e2e2e; border-radius: 6px; color: #aaa; font-size: 0.72rem; padding: 0.3rem 0.65rem; cursor: pointer; transition: all 0.15s; }
-    .btn-edit:hover { border-color: #D4A832; color: #D4A832; }
+    /* FORM */
+    .sec-title { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#444; margin-bottom:1.25rem; padding-bottom:.5rem; border-bottom:1px solid #181818; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .full { grid-column:1/-1; }
+    .field { display:flex; flex-direction:column; gap:.35rem; }
+    .field label { font-size:.72rem; font-weight:600; color:#666; letter-spacing:.04em; text-transform:uppercase; }
+    .field input, .field textarea, .field select {
+      background:#0d0d0d; border:1.5px solid #1e1e1e; border-radius:8px;
+      padding:.65rem .9rem; color:#f0f0f0; font-size:.875rem; outline:none;
+      transition:border-color .15s; width:100%; font-family:inherit;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color:#D4A832; }
+    .field textarea { resize:vertical; min-height:90px; }
+    .hint { font-size:.7rem; color:#444; }
+    .check-row { display:flex; align-items:center; gap:.5rem; cursor:pointer; font-size:.875rem; color:#888; padding:.5rem 0; }
+    .check-row input { accent-color:#D4A832; width:15px; height:15px; }
 
-    /* Edit modal */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: #151515; border: 1px solid #232323; border-radius: 12px; padding: 2rem; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
-    .modal h2 { font-size: 1.1rem; margin-bottom: 1.5rem; }
-    .modal-field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
-    .modal-field label { font-size: 0.75rem; font-weight: 600; color: #888; letter-spacing: 0.04em; text-transform: uppercase; }
-    .modal-field input, .modal-field textarea, .modal-field select { background: #1e1e1e; border: 1.5px solid #2e2e2e; border-radius: 6px; padding: 0.6rem 0.85rem; color: #f0f0f0; font-size: 0.875rem; outline: none; transition: border-color 0.15s; width: 100%; font-family: inherit; }
-    .modal-field input:focus, .modal-field textarea:focus, .modal-field select:focus { border-color: #D4A832; }
-    .modal-field textarea { resize: vertical; min-height: 80px; }
-    .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
-    .btn-wa { flex: 1; padding: 0.75rem; background: #25D366; border: none; border-radius: 8px; color: #fff; font-weight: 700; font-size: 0.875rem; cursor: pointer; transition: background 0.15s; }
-    .btn-wa:hover { background: #1ebe57; }
-    .btn-cancel { padding: 0.75rem 1.25rem; background: none; border: 1px solid #2e2e2e; border-radius: 8px; color: #888; font-size: 0.875rem; cursor: pointer; transition: all 0.15s; }
-    .btn-cancel:hover { border-color: #888; color: #f0f0f0; }
+    /* Image drop */
+    .img-drop { border:2px dashed #1e1e1e; border-radius:8px; padding:1.5rem; text-align:center; cursor:pointer; transition:all .2s; position:relative; }
+    .img-drop:hover, .img-drop.over { border-color:#D4A832; background:rgba(212,168,50,.04); }
+    .img-drop input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .img-drop-icon { font-size:1.75rem; opacity:.35; margin-bottom:.4rem; }
+    .img-drop-text { font-size:.8rem; color:#555; }
+    .img-preview { max-width:100%; max-height:160px; border-radius:6px; object-fit:contain; display:none; margin:.75rem auto 0; }
 
-    .checkbox-row { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-    .checkbox-row input[type="checkbox"] { accent-color: #D4A832; width: 16px; height: 16px; }
+    /* Buttons */
+    .btn-primary { width:100%; padding:.85rem; background:#D4A832; border:none; border-radius:8px; color:#080808; font-weight:700; font-size:.9rem; cursor:pointer; transition:background .15s; margin-top:1.5rem; }
+    .btn-primary:hover { background:#F0C040; }
+    .btn-primary:disabled { background:#1e1e1e; color:#444; cursor:not-allowed; }
+    .btn-secondary { padding:.65rem 1.25rem; background:none; border:1px solid #2e2e2e; border-radius:8px; color:#888; font-size:.85rem; cursor:pointer; transition:all .15s; }
+    .btn-secondary:hover { border-color:#888; color:#f0f0f0; }
+    .btn-green { padding:.65rem 1.25rem; background:#25D366; border:none; border-radius:8px; color:#fff; font-weight:700; font-size:.85rem; cursor:pointer; transition:background .15s; }
+    .btn-green:hover { background:#1ebe57; }
+
+    /* Status */
+    .status { border-radius:8px; padding:1rem 1.25rem; margin-top:1.25rem; font-size:.875rem; display:none; line-height:1.5; }
+    .status.ok      { background:rgba(37,211,102,.1); border:1px solid rgba(37,211,102,.3); color:#25d366; }
+    .status.err     { background:rgba(228,68,68,.1);  border:1px solid rgba(228,68,68,.3);  color:#e44444; }
+    .status.loading { background:rgba(212,168,50,.08);border:1px solid rgba(212,168,50,.2); color:#D4A832; }
+    .status.info    { background:rgba(100,149,237,.08);border:1px solid rgba(100,149,237,.2);color:#7ab0ff; }
+
+    /* Mode selector */
+    .mode-selector { display:flex; gap:.5rem; margin-bottom:2rem; padding:.5rem; background:#0d0d0d; border:1px solid #1a1a1a; border-radius:10px; }
+    .mode-btn { flex:1; padding:.65rem; border:none; border-radius:7px; cursor:pointer; font-size:.82rem; font-weight:600; transition:all .15s; background:none; color:#555; }
+    .mode-btn.active { background:#1e1e1e; color:#f0f0f0; }
+    .mode-btn.active.gh { color:#D4A832; }
+
+    /* Steps */
+    .steps-box { background:#0d0d0d; border:1px solid #1a1a1a; border-radius:10px; padding:1.25rem; margin-top:1.25rem; }
+    .steps-box h4 { font-size:.8rem; font-weight:700; margin-bottom:1rem; color:#888; }
+    .step-item { display:flex; gap:.75rem; align-items:flex-start; margin-bottom:.75rem; font-size:.82rem; color:#777; }
+    .step-item:last-child { margin-bottom:0; }
+    .step-n { width:20px; height:20px; border-radius:50%; background:#D4A832; color:#080808; font-weight:700; font-size:.65rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:.05rem; }
+    .step-item strong { color:#aaa; }
+    .step-item code { background:#1a1a1a; padding:.1rem .35rem; border-radius:4px; font-size:.75rem; color:#D4A832; }
+
+    /* Result card */
+    .result-card { background:#0d0d0d; border:1px solid #1a1a1a; border-radius:10px; padding:1.25rem; margin-top:1rem; display:none; }
+    .result-card h4 { font-size:.82rem; font-weight:700; color:#888; margin-bottom:.75rem; }
+    .md-box { background:#060606; border:1px solid #1a1a1a; border-radius:6px; padding:.85rem 1rem; font-family:monospace; font-size:.72rem; color:#aaa; white-space:pre; overflow-x:auto; margin-bottom:.75rem; max-height:220px; overflow-y:auto; }
+    .result-actions { display:flex; gap:.75rem; flex-wrap:wrap; }
+
+    /* Stats */
+    .stats-row { display:flex; gap:.75rem; margin-bottom:2rem; flex-wrap:wrap; }
+    .stat-card { background:#0d0d0d; border:1px solid #1a1a1a; border-radius:8px; padding:.9rem 1.25rem; }
+    .stat-card .n { font-size:1.6rem; font-weight:700; color:#D4A832; line-height:1; }
+    .stat-card .l { font-size:.68rem; color:#555; text-transform:uppercase; letter-spacing:.06em; margin-top:.2rem; }
+
+    /* Table */
+    .prod-table { width:100%; border-collapse:collapse; }
+    .prod-table th { text-align:left; font-size:.68rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#3a3a3a; padding:.5rem .75rem; border-bottom:1px solid #1a1a1a; }
+    .prod-table td { padding:.55rem .75rem; border-bottom:1px solid #111; font-size:.82rem; vertical-align:middle; }
+    .prod-table tr:hover td { background:#0d0d0d; }
+    .prod-img-sm { width:34px; height:34px; border-radius:5px; object-fit:cover; background:#1e1e1e; }
+    .cat-pill { display:inline-block; padding:.1rem .45rem; background:#151515; border:1px solid #2a2a2a; border-radius:100px; font-size:.67rem; color:#555; }
+    .gold-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#D4A832; }
+
+    @media (max-width:600px) { .form-grid { grid-template-columns:1fr; } .adm-tabs { gap:0; } .adm-tab { padding:.4rem .55rem; font-size:.75rem; } }
   </style>
 </head>
 <body>
@@ -91,226 +134,438 @@ const productosData = productos.map(p => ({
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
-    <span class="logo">Jhugo3D ✦ Admin</span>
-    <h1>Panel de administración</h1>
-    <p>Acceso restringido al propietario.</p>
-    <div class="field">
+    <span class="login-logo">Jhugo3D ✦ Admin</span>
+    <h1>Benvingut de nou</h1>
+    <p>Accés restringit al propietari.</p>
+    <div class="field" style="margin-bottom:.85rem">
       <label>Email</label>
-      <input type="email" id="adm-email" placeholder="tu@email.com" autocomplete="email" />
+      <input type="email" id="l-email" placeholder="soportejhugo3d@gmail.com" autocomplete="email" />
     </div>
     <div class="field">
-      <label>Contraseña</label>
-      <input type="password" id="adm-pass" placeholder="••••••••" autocomplete="current-password" />
+      <label>Contrasenya</label>
+      <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password" />
     </div>
-    <button class="btn-login" id="adm-login-btn">Entrar →</button>
-    <p class="login-err" id="adm-err">Email o contraseña incorrectos.</p>
+    <button class="btn-primary" id="l-btn" style="margin-top:1rem">Entrar →</button>
+    <p class="login-err" id="l-err">Email o contrasenya incorrectes.</p>
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- PANEL -->
 <div id="admin-panel">
-  <div class="admin-header">
-    <h1>🛠 Jhugo3D — Panel de administración</h1>
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <span id="adm-user-label"></span>
-      <button class="btn-logout" id="adm-logout">Cerrar sesión</button>
+  <div class="adm-header">
+    <div style="display:flex;align-items:center">
+      <span class="adm-logo">Jhugo3D</span>
+      <div class="adm-tabs">
+        <button class="adm-tab active" data-tab="add">✚ Nou producte</button>
+        <button class="adm-tab" data-tab="list">☰ Productes</button>
+        <button class="adm-tab" data-tab="cfg">⚙ GitHub</button>
+      </div>
     </div>
+    <button class="btn-sm" id="logout-btn">Sortir</button>
   </div>
 
-  <div class="admin-content">
-    <div class="admin-stats">
-      <div class="admin-stat"><div class="n" id="stat-total">0</div><div class="l">Productos totales</div></div>
-      <div class="admin-stat"><div class="n" id="stat-dest">0</div><div class="l">Destacados</div></div>
-      <div class="admin-stat"><div class="n" id="stat-minprice">—</div><div class="l">Precio mínimo</div></div>
+  <div class="adm-body">
+
+    <!-- ═══ TAB NOU PRODUCTE ═══ -->
+    <div class="tab-panel active" id="tab-add">
+      <p class="sec-title">Com vols afegir el producte?</p>
+      <div class="mode-selector">
+        <button class="mode-btn active gh" data-mode="github" id="mode-gh">
+          ⚡ Automàtic via GitHub<br><span style="font-size:.7rem;font-weight:400;opacity:.7">El producte s'afegeix sol (cal token)</span>
+        </button>
+        <button class="mode-btn" data-mode="manual" id="mode-manual">
+          📥 Descarregar fitxers<br><span style="font-size:.7rem;font-weight:400;opacity:.7">Sempre funciona, sense token</span>
+        </button>
+      </div>
+
+      <p class="sec-title" style="margin-top:0">Dades del producte</p>
+      <form id="prod-form">
+        <div class="form-grid">
+          <div class="field full">
+            <label>Nom del producte *</label>
+            <input type="text" id="f-nom" placeholder="Penjoll de lluna daurada" required />
+          </div>
+          <div class="field">
+            <label>Preu numèric *</label>
+            <input type="number" id="f-preu" placeholder="8" min="0" step="0.5" required />
+            <span class="hint">Número. Ex: 8</span>
+          </div>
+          <div class="field">
+            <label>Preu visible *</label>
+            <input type="text" id="f-preutxt" placeholder="8€" required />
+            <span class="hint">Ex: "8€" o "Des de 8€"</span>
+          </div>
+          <div class="field">
+            <label>Preu 2a línia (opcional)</label>
+            <input type="text" id="f-preuvar" placeholder="· personalitzat des de 12€" />
+          </div>
+          <div class="field">
+            <label>Categoria *</label>
+            <select id="f-cat" required>
+              <option value="">Selecciona...</option>
+              <option value="joyeria">Joieria</option>
+              <option value="soportes">Suports</option>
+              <option value="figuras">Figures</option>
+              <option value="marcos">Marcs</option>
+              <option value="decoracion">Decoració</option>
+            </select>
+          </div>
+          <div class="field" style="justify-content:flex-end">
+            <label class="check-row">
+              <input type="checkbox" id="f-dest" />
+              Destacat (apareix a l'inici)
+            </label>
+          </div>
+          <div class="field full">
+            <label>Descripció *</label>
+            <textarea id="f-desc" placeholder="Descriu el producte: material, mida, ús..." required></textarea>
+          </div>
+          <div class="field full">
+            <label>Foto del producte *</label>
+            <div class="img-drop" id="img-drop">
+              <input type="file" id="f-img" accept="image/*" required />
+              <div id="img-ph">
+                <div class="img-drop-icon">📷</div>
+                <p class="img-drop-text">Clica o arrossega la foto aquí<br><span style="font-size:.68rem;color:#333">JPG · PNG · WEBP — Recomanat 800×800px</span></p>
+              </div>
+              <img id="img-prev" class="img-preview" alt="" />
+            </div>
+          </div>
+          <div class="field full">
+            <label>Identificador (slug) *</label>
+            <input type="text" id="f-slug" required />
+            <span class="hint">S'usa a la URL. Només lletres, números i guions. Ex: p49</span>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" id="f-submit">✚ Afegir producte</button>
+      </form>
+
+      <div class="status" id="f-status"></div>
+
+      <!-- RESULTAT MODE MANUAL -->
+      <div class="result-card" id="result-card">
+        <h4>📥 Fitxers generats — segueix aquests passos:</h4>
+
+        <div class="steps-box" style="margin-top:0;margin-bottom:1rem">
+          <div class="step-item"><div class="step-n">1</div><div>Descarrega els dos fitxers de baix</div></div>
+          <div class="step-item"><div class="step-n">2</div><div>Obre el teu repositori a <strong>github.com</strong></div></div>
+          <div class="step-item"><div class="step-n">3</div><div>Ves a <code>public/img/productos/</code> → clica <strong>"Add file"</strong> → puja la imatge</div></div>
+          <div class="step-item"><div class="step-n">4</div><div>Ves a <code>src/content/productos/</code> → clica <strong>"Add file"</strong> → <strong>"Create new file"</strong> → enganxa el contingut de baix</div></div>
+          <div class="step-item"><div class="step-n">5</div><div>Clica <strong>"Commit changes"</strong> — la web s'actualitza sola en ~2 min</div></div>
+        </div>
+
+        <div class="md-box" id="md-output"></div>
+
+        <div class="result-actions">
+          <button class="btn-secondary" id="copy-md-btn">📋 Copiar contingut</button>
+          <button class="btn-green" id="dl-img-btn">⬇ Descarregar imatge</button>
+        </div>
+      </div>
     </div>
 
-    <p class="section-title">Gestión de productos</p>
-    <p style="color:#888;font-size:.82rem;margin-bottom:1.25rem;">Haz clic en <strong style="color:#D4A832">Editar</strong> para modificar un producto. Los cambios se envían por WhatsApp al desarrollador para que los aplique.</p>
+    <!-- ═══ TAB PRODUCTES ═══ -->
+    <div class="tab-panel" id="tab-list">
+      <div class="stats-row">
+        <div class="stat-card"><div class="n" id="st-total">0</div><div class="l">Productes</div></div>
+        <div class="stat-card"><div class="n" id="st-dest">0</div><div class="l">Destacats</div></div>
+        <div class="stat-card"><div class="n" id="st-min">—</div><div class="l">Preu mínim</div></div>
+      </div>
+      <p class="sec-title">Tots els productes</p>
+      <table class="prod-table">
+        <thead><tr><th></th><th>Nom</th><th>Preu</th><th>Categoria</th><th>★</th></tr></thead>
+        <tbody id="p-tbody"></tbody>
+      </table>
+    </div>
 
-    <table class="prod-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Slug</th>
-          <th>Nombre</th>
-          <th>Precio</th>
-          <th>Categoría</th>
-          <th>Dest.</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="prod-tbody"></tbody>
-    </table>
+    <!-- ═══ TAB GITHUB ═══ -->
+    <div class="tab-panel" id="tab-cfg">
+      <p class="sec-title">Connexió automàtica amb GitHub</p>
+      <p style="color:#555;font-size:.82rem;line-height:1.6;margin-bottom:1.5rem">
+        Configurant el token de GitHub, els productes nous s'afegiran directament a la web sense cap pas manual.<br>
+        <strong style="color:#888">Sense token</strong>, el mode "Descarregar fitxers" sempre funcionarà igualment.
+      </p>
+      <div class="steps-box" style="margin-bottom:1.5rem">
+        <h4>Com obtenir el token:</h4>
+        <div class="step-item"><div class="step-n">1</div><div>Ves a <a href="https://github.com/settings/tokens/new?scopes=repo&description=Jhugo3D+Admin" target="_blank" style="color:#D4A832">github.com/settings/tokens/new</a></div></div>
+        <div class="step-item"><div class="step-n">2</div><div>Marca el permís <code>repo</code></div></div>
+        <div class="step-item"><div class="step-n">3</div><div>Clica "Generate token" i copia el codi <code>ghp_...</code></div></div>
+        <div class="step-item"><div class="step-n">4</div><div>Enganxa'l aquí i guarda</div></div>
+      </div>
+      <div class="form-grid" style="max-width:500px">
+        <div class="field">
+          <label>Usuari de GitHub</label>
+          <input type="text" id="cfg-user" placeholder="el-teu-usuari" />
+        </div>
+        <div class="field">
+          <label>Nom del repositori</label>
+          <input type="text" id="cfg-repo" placeholder="jhugo3d" />
+        </div>
+        <div class="field full">
+          <label>Token (ghp_...)</label>
+          <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
+          <span class="hint">Es guarda al teu navegador. Ningú més pot veure'l.</span>
+        </div>
+      </div>
+      <button class="btn-primary" id="cfg-save" style="max-width:200px;margin-top:.75rem">Guardar</button>
+      <div class="status" id="cfg-status"></div>
+    </div>
+
   </div>
 </div>
 
-<!-- EDIT MODAL -->
-<div class="modal-overlay" id="edit-modal">
-  <div class="modal">
-    <h2>Editar producto — <span id="modal-slug"></span></h2>
-    <div class="modal-field">
-      <label>Nombre</label>
-      <input type="text" id="ed-nombre" />
-    </div>
-    <div class="modal-field">
-      <label>Precio (€)</label>
-      <input type="number" id="ed-precio" min="0" step="0.5" />
-    </div>
-    <div class="modal-field">
-      <label>Precio visible (ej: "5€" o "Desde 8€")</label>
-      <input type="text" id="ed-preciotexto" />
-    </div>
-    <div class="modal-field">
-      <label>Precio variante (opcional, ej: "· desde 12€ personalizado")</label>
-      <input type="text" id="ed-preciovariante" />
-    </div>
-    <div class="modal-field">
-      <label>Categoría</label>
-      <select id="ed-categoria">
-        <option value="joyeria">Joyería</option>
-        <option value="soportes">Soportes</option>
-        <option value="figuras">Figuras</option>
-        <option value="marcos">Marcos</option>
-        <option value="decoracion">Decoración</option>
-      </select>
-    </div>
-    <div class="modal-field">
-      <label>Descripción</label>
-      <textarea id="ed-desc" rows="4"></textarea>
-    </div>
-    <div class="modal-field">
-      <label class="checkbox-row">
-        <input type="checkbox" id="ed-destacado" />
-        Producto destacado (aparece en el inicio)
-      </label>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" id="modal-cancel">Cancelar</button>
-      <button class="btn-wa" id="modal-send">📲 Enviar cambios por WhatsApp</button>
-    </div>
-  </div>
-</div>
+<script is:inline define:vars={{ productosData, nextSlug }}>
+var P = productosData;
+var CRED = { email: 'soportejhugo3d@gmail.com', pass: 'Quim guapo' };
+var mode = 'github';
+var imgB64 = null, imgExt = 'jpg', imgFilename = '';
 
-<script is:inline define:vars={{ productosData }}>
-  var PRODUCTS = productosData;
-  var WA = '34630481639';
-  var CRED = { email: 'soportejhugo3d@gmail.com', pass: 'Quim guapo' };
-  var currentSlug = null;
+/* ─ AUTH ─ */
+function logged() { return sessionStorage.getItem('jh_adm') === '1'; }
+function showPanel() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'block';
+  loadCfg(); renderList();
+  document.getElementById('f-slug').value = nextSlug;
+  updateModeUI();
+}
+if (logged()) showPanel();
 
-  /* AUTH */
-  function checkSession() {
-    return sessionStorage.getItem('jh_admin') === '1';
-  }
-  function showPanel() {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    document.getElementById('adm-user-label').textContent = CRED.email;
-    renderTable();
-  }
-  if (checkSession()) showPanel();
+function tryLogin() {
+  var e = document.getElementById('l-email').value.trim();
+  var p = document.getElementById('l-pass').value;
+  if (e === CRED.email && p === CRED.pass) {
+    sessionStorage.setItem('jh_adm', '1');
+    document.getElementById('l-err').style.display = 'none';
+    showPanel();
+  } else { document.getElementById('l-err').style.display = 'block'; }
+}
+document.getElementById('l-btn').onclick = tryLogin;
+document.getElementById('l-email').onkeydown = function(e){ if(e.key==='Enter') tryLogin(); };
+document.getElementById('l-pass').onkeydown  = function(e){ if(e.key==='Enter') tryLogin(); };
+document.getElementById('logout-btn').onclick = function(){ sessionStorage.removeItem('jh_adm'); location.reload(); };
 
-  document.getElementById('adm-login-btn').addEventListener('click', tryLogin);
-  document.getElementById('adm-email').addEventListener('keydown', function(e){ if(e.key==='Enter') tryLogin(); });
-  document.getElementById('adm-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') tryLogin(); });
+/* ─ TABS ─ */
+document.querySelectorAll('.adm-tab').forEach(function(t){
+  t.onclick = function(){
+    document.querySelectorAll('.adm-tab').forEach(function(x){ x.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    document.getElementById('tab-'+t.dataset.tab).classList.add('active');
+  };
+});
 
-  function tryLogin() {
-    var email = document.getElementById('adm-email').value.trim();
-    var pass  = document.getElementById('adm-pass').value;
-    var err   = document.getElementById('adm-err');
-    if (email === CRED.email && pass === CRED.pass) {
-      sessionStorage.setItem('jh_admin', '1');
-      err.style.display = 'none';
-      showPanel();
-    } else {
-      err.style.display = 'block';
-    }
-  }
+/* ─ MODE ─ */
+document.getElementById('mode-gh').onclick = function(){ mode='github'; updateModeUI(); };
+document.getElementById('mode-manual').onclick = function(){ mode='manual'; updateModeUI(); };
+function updateModeUI(){
+  var ghBtn = document.getElementById('mode-gh');
+  var manBtn = document.getElementById('mode-manual');
+  ghBtn.classList.toggle('active', mode==='github');
+  ghBtn.classList.toggle('gh', mode==='github');
+  manBtn.classList.toggle('active', mode==='manual');
+  document.getElementById('f-submit').textContent = mode==='github'
+    ? '⚡ Afegir producte a la web'
+    : '📥 Generar fitxers per descarregar';
+}
 
-  document.getElementById('adm-logout').addEventListener('click', function() {
-    sessionStorage.removeItem('jh_admin');
-    location.reload();
+/* ─ IMAGE ─ */
+document.getElementById('f-img').onchange = function(e){
+  var file = e.target.files[0]; if(!file) return;
+  imgExt = file.name.split('.').pop().toLowerCase();
+  var rd = new FileReader();
+  rd.onload = function(ev){
+    imgB64 = ev.target.result.split(',')[1];
+    imgFilename = file.name;
+    var prev = document.getElementById('img-prev');
+    prev.src = ev.target.result; prev.style.display = 'block';
+    document.getElementById('img-ph').style.display = 'none';
+  };
+  rd.readAsDataURL(file);
+};
+['dragover','dragleave','drop'].forEach(function(ev){
+  document.getElementById('img-drop').addEventListener(ev,function(e){
+    e.preventDefault();
+    this.classList.toggle('over', ev==='dragover');
   });
+});
 
-  /* TABLE */
-  function renderTable() {
-    var total = PRODUCTS.length;
-    var dest  = PRODUCTS.filter(function(p){ return p.destacado; }).length;
-    var prices = PRODUCTS.map(function(p){ return p.precio; });
-    document.getElementById('stat-total').textContent   = total;
-    document.getElementById('stat-dest').textContent    = dest;
-    document.getElementById('stat-minprice').textContent = Math.min.apply(null, prices) + '€';
+/* ─ AUTO SLUG ─ */
+document.getElementById('f-nom').oninput = function(){
+  var cur = document.getElementById('f-slug').value;
+  if(cur===nextSlug||cur===''){
+    var s = this.value.toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g,'')
+      .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').substring(0,30);
+    document.getElementById('f-slug').value = s||nextSlug;
+  }
+};
 
-    var tbody = document.getElementById('prod-tbody');
-    tbody.innerHTML = PRODUCTS.map(function(p) {
-      return '<tr>' +
-        '<td><img class="prod-img" src="' + p.imagen + '" alt="" loading="lazy"></td>' +
-        '<td style="color:#555;font-size:.78rem">' + p.slug + '</td>' +
-        '<td style="font-weight:600">' + p.nombre + '</td>' +
-        '<td style="color:#D4A832;font-weight:700">' + p.precioTexto + '</td>' +
-        '<td><span class="cat-badge">' + p.categoria + '</span></td>' +
-        '<td>' + (p.destacado ? '<span class="destacado-dot" title="Destacado"></span>' : '') + '</td>' +
-        '<td><button class="btn-edit" data-slug="' + p.slug + '">Editar</button></td>' +
-      '</tr>';
-    }).join('');
+/* ─ GITHUB API ─ */
+function ghPut(path, content, msg, token, owner, repo){
+  return fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+path,{
+    method:'PUT',
+    headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github+json'},
+    body:JSON.stringify({message:msg,content:content})
+  }).then(function(r){
+    if(!r.ok) return r.json().then(function(d){throw new Error(d.message||r.status);});
+    return r.json();
+  });
+}
+function b64utf8(str){ return btoa(unescape(encodeURIComponent(str))); }
 
-    document.querySelectorAll('.btn-edit').forEach(function(btn) {
-      btn.addEventListener('click', function() { openModal(btn.dataset.slug); });
+/* ─ BUILD MD ─ */
+function buildMd(slug){
+  var nom    = document.getElementById('f-nom').value.trim();
+  var preu   = document.getElementById('f-preu').value;
+  var preutx = document.getElementById('f-preutxt').value.trim();
+  var preuv  = document.getElementById('f-preuvar').value.trim();
+  var cat    = document.getElementById('f-cat').value;
+  var dest   = document.getElementById('f-dest').checked;
+  var desc   = document.getElementById('f-desc').value.trim();
+  var ext    = imgExt||'jpg';
+  var lines = [
+    '---',
+    'nombre: "'+nom.replace(/"/g,'\\"')+'"',
+    'precio: '+preu,
+    'precioTexto: "'+preutx+'"',
+    preuv ? 'precioVariante: "'+preuv+'"' : null,
+    'categoria: "'+cat+'"',
+    'imagen: "/img/productos/'+slug+'.'+ext+'"',
+    'descripcion: "'+desc.replace(/"/g,'\\"').replace(/\n/g,' ')+'"',
+    'destacado: '+dest,
+    '---',
+    '',
+    desc,
+  ].filter(function(l){return l!==null;}).join('\n');
+  return lines;
+}
+
+/* ─ SUBMIT ─ */
+document.getElementById('prod-form').onsubmit = function(e){
+  e.preventDefault();
+  var slug = document.getElementById('f-slug').value.trim();
+  if(!imgB64){ showStatus('f-status','err','⚠ Afegeix una foto del producte.'); return; }
+
+  if(mode==='manual'){
+    doManual(slug); return;
+  }
+
+  var u = localStorage.getItem('jh_u');
+  var r = localStorage.getItem('jh_r');
+  var t = localStorage.getItem('jh_t');
+  if(!u||!r||!t){
+    showStatus('f-status','info',
+      '⚠ No tens el token de GitHub configurat.<br>'+
+      '<span style="font-size:.8rem">Ves a la pestanya <strong>⚙ GitHub</strong> per configurar-lo, '+
+      'o utilitza el mode <strong>"Descarregar fitxers"</strong> de dalt.</span>'
+    );
+    return;
+  }
+  doGitHub(slug, u, r, t);
+};
+
+function doGitHub(slug, u, r, t){
+  var nom = document.getElementById('f-nom').value.trim();
+  var btn = document.getElementById('f-submit');
+  btn.disabled = true;
+  showStatus('f-status','loading','⏳ Pujant la imatge...');
+  var ext = imgExt||'jpg';
+  ghPut('public/img/productos/'+slug+'.'+ext, imgB64, 'Add image: '+nom, t, u, r)
+    .then(function(){
+      showStatus('f-status','loading','⏳ Creant el producte...');
+      return ghPut('src/content/productos/'+slug+'.md', b64utf8(buildMd(slug)), 'Add product: '+nom, t, u, r);
+    })
+    .then(function(){
+      showStatus('f-status','ok',
+        '✓ Producte "'+nom+'" afegit!<br>'+
+        '<span style="font-size:.8rem;opacity:.8">La web s\'actualitzarà en ~2 minuts.</span>'
+      );
+      btn.disabled=false;
+      resetForm();
+    })
+    .catch(function(err){
+      showStatus('f-status','err','✗ Error: '+err.message+'<br><span style="font-size:.78rem">Comprova el token a la pestanya ⚙ GitHub.</span>');
+      btn.disabled=false;
     });
-  }
+}
 
-  /* MODAL */
-  function openModal(slug) {
-    var p = PRODUCTS.find(function(x){ return x.slug === slug; });
-    if (!p) return;
-    currentSlug = slug;
-    document.getElementById('modal-slug').textContent    = slug;
-    document.getElementById('ed-nombre').value           = p.nombre;
-    document.getElementById('ed-precio').value           = p.precio;
-    document.getElementById('ed-preciotexto').value      = p.precioTexto;
-    document.getElementById('ed-preciovariante').value   = p.precioVariante || '';
-    document.getElementById('ed-categoria').value        = p.categoria;
-    document.getElementById('ed-desc').value             = p.descripcion;
-    document.getElementById('ed-destacado').checked      = p.destacado;
-    document.getElementById('edit-modal').classList.add('open');
-  }
+function doManual(slug){
+  var md = buildMd(slug);
+  document.getElementById('md-output').textContent = md;
+  var card = document.getElementById('result-card');
+  card.style.display = 'block';
+  card.scrollIntoView({behavior:'smooth',block:'start'});
+  showStatus('f-status','ok','✓ Fitxers generats. Segueix els passos de baix per pujar-los a GitHub.');
+}
 
-  document.getElementById('modal-cancel').addEventListener('click', closeModal);
-  document.getElementById('edit-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
+document.getElementById('copy-md-btn').onclick = function(){
+  navigator.clipboard.writeText(document.getElementById('md-output').textContent).then(function(){
+    document.getElementById('copy-md-btn').textContent = '✓ Copiat!';
+    setTimeout(function(){ document.getElementById('copy-md-btn').textContent = '📋 Copiar contingut'; }, 2000);
   });
-  function closeModal() {
-    document.getElementById('edit-modal').classList.remove('open');
-    currentSlug = null;
-  }
+};
 
-  document.getElementById('modal-send').addEventListener('click', function() {
-    if (!currentSlug) return;
-    var nombre     = document.getElementById('ed-nombre').value.trim();
-    var precio     = document.getElementById('ed-precio').value;
-    var precioText = document.getElementById('ed-preciotexto').value.trim();
-    var precioVar  = document.getElementById('ed-preciovariante').value.trim();
-    var categoria  = document.getElementById('ed-categoria').value;
-    var desc       = document.getElementById('ed-desc').value.trim();
-    var dest       = document.getElementById('ed-destacado').checked;
+document.getElementById('dl-img-btn').onclick = function(){
+  if(!imgB64) return;
+  var slug = document.getElementById('f-slug').value.trim();
+  var ext  = imgExt||'jpg';
+  var a = document.createElement('a');
+  a.href = 'data:image/'+ext+';base64,'+imgB64;
+  a.download = slug+'.'+ext;
+  a.click();
+};
 
-    var msg = [
-      '🛠 CAMBIO DE PRODUCTO — Jhugo3D Admin',
-      '',
-      'Slug: ' + currentSlug,
-      'Nombre: ' + nombre,
-      'Precio: ' + precio + '€ (visible: ' + precioText + ')',
-      precioVar ? 'Precio variante: ' + precioVar : '',
-      'Categoría: ' + categoria,
-      'Destacado: ' + (dest ? 'Sí' : 'No'),
-      '',
-      'Descripción:',
-      desc,
-    ].filter(function(l){ return l !== ''; }).join('\n');
+function resetForm(){
+  document.getElementById('prod-form').reset();
+  document.getElementById('img-prev').style.display='none';
+  document.getElementById('img-ph').style.display='block';
+  document.getElementById('result-card').style.display='none';
+  imgB64=null;
+  document.getElementById('f-slug').value=nextSlug;
+}
 
-    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg));
-    closeModal();
-  });
+/* ─ CONFIG ─ */
+function loadCfg(){
+  var u=localStorage.getItem('jh_u')||'';
+  var r=localStorage.getItem('jh_r')||'';
+  var t=localStorage.getItem('jh_t')||'';
+  document.getElementById('cfg-user').value=u;
+  document.getElementById('cfg-repo').value=r;
+  document.getElementById('cfg-token').value=t;
+}
+document.getElementById('cfg-save').onclick = function(){
+  var u=document.getElementById('cfg-user').value.trim();
+  var r=document.getElementById('cfg-repo').value.trim();
+  var t=document.getElementById('cfg-token').value.trim();
+  localStorage.setItem('jh_u',u);
+  localStorage.setItem('jh_r',r);
+  localStorage.setItem('jh_t',t);
+  showStatus('cfg-status','ok','✓ Configuració guardada. Ara pots usar el mode automàtic.');
+};
+
+/* ─ LIST ─ */
+function renderList(){
+  var dest=P.filter(function(p){return p.destacado;}).length;
+  var prices=P.map(function(p){return p.precio;});
+  document.getElementById('st-total').textContent=P.length;
+  document.getElementById('st-dest').textContent=dest;
+  document.getElementById('st-min').textContent=Math.min.apply(null,prices)+'€';
+  document.getElementById('p-tbody').innerHTML=P.map(function(p){
+    return '<tr>'+
+      '<td><img class="prod-img-sm" src="'+p.imagen+'" alt="" loading="lazy"></td>'+
+      '<td style="font-weight:600">'+p.nombre+'</td>'+
+      '<td style="color:#D4A832;font-weight:700">'+p.precioTexto+'</td>'+
+      '<td><span class="cat-pill">'+p.categoria+'</span></td>'+
+      '<td>'+(p.destacado?'<span class="gold-dot"></span>':'')+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
+/* ─ HELPERS ─ */
+function showStatus(id,type,html){
+  var el=document.getElementById(id);
+  el.className='status '+type; el.innerHTML=html; el.style.display='block';
+}
 </script>
-
 </body>
 </html>
